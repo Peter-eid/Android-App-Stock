@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.grizly.stockapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/title_activity_splash"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.StockActivity"
+            android:label="@string/title_activity_stock"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.ProductsActivity"
+            android:label="@string/title_activity_products"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.AddProductActivity"
+            android:label="@string/title_activity_add_product"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.CustomersActivity"
+            android:label="@string/title_activity_customers"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.OrderActivity"
+            android:label="@string/title_activity_order"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.AddCustomerActivity"
+            android:label="@string/title_activity_add_customer"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+    </application>
+
+</manifest>
