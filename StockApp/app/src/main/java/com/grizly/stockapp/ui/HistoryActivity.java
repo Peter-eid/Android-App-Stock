@@ -1,15 +1,11 @@
 package com.grizly.stockapp.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -18,15 +14,16 @@ import android.widget.TextView;
 
 import com.grizly.stockapp.Config;
 import com.grizly.stockapp.R;
+import com.grizly.stockapp.beans.Order;
 import com.grizly.stockapp.beans.Product;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class ProductsActivity extends AppCompatActivity {
+public class HistoryActivity extends AppCompatActivity {
 
-    public ArrayList<Product> productList = new ArrayList<Product>();
-    public ArrayList<Product> useproductList = new ArrayList<Product>();
+    public ArrayList<Order> orderList = new ArrayList<Order>();
+    public ArrayList<Order> useorderList = new ArrayList<Order>();
 
     public ProductsAdapter productAdapter;
     public ListView productLV;
@@ -40,12 +37,12 @@ public class ProductsActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         AppCompatTextView title = (AppCompatTextView) toolbar.findViewById(R.id.title);
-        title.setText("Products");
+        title.setText("History");
         setSupportActionBar(toolbar);
 
-//      productList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, this);
+//      orderList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, this);
         productLV = (ListView) findViewById(R.id.list);
-        productAdapter = new ProductsAdapter(ProductsActivity.this, productList);
+        productAdapter = new ProductsAdapter(HistoryActivity.this, orderList);
         try {
             productLV.setAdapter(productAdapter);
         } catch (Exception ex) {
@@ -56,56 +53,56 @@ public class ProductsActivity extends AppCompatActivity {
 
     @Override
     public void onResume() {
-        productList.clear();
-        useproductList.clear();
-        useproductList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, this);
-        for(int i = 0 ;  i < useproductList.size(); i++){
-            productList.add((Product)((useproductList).get(i)));
+        orderList.clear();
+        useorderList.clear();
+        useorderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, this);
+        for(int i = 0 ;  i < useorderList.size(); i++){
+            orderList.add((Order) ((useorderList).get(i)));
         }
         productAdapter.notifyDataSetChanged();
 
         super.onResume();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.add_action:
-                Intent intent = new Intent(ProductsActivity.this, AddProductActivity.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_main, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle item selection
+//        switch (item.getItemId()) {
+//            case R.id.add_action:
+//                Intent intent = new Intent(HistoryActivity.this, AddProductActivity.class);
+//                startActivity(intent);
+//                return true;
+//            default:
+//                return super.onOptionsItemSelected(item);
+//        }
+//    }
 
     public class ProductsAdapter extends BaseAdapter {
 
-        ArrayList<Product> productList;
+        ArrayList<Order> orderList;
         ViewHolder holder;
         Context context;
 
-        public ProductsAdapter(Context context, ArrayList<Product> productList) {
-            this.productList = productList;
+        public ProductsAdapter(Context context, ArrayList<Order> orderList) {
+            this.orderList = orderList;
             this.context = context;
         }
 
         @Override
         public int getCount() {
-            return productList.size();
+            return orderList.size();
         }
 
         @Override
-        public Product getItem(int position) {
-            return productList.get(position);
+        public Order getItem(int position) {
+            return orderList.get(position);
         }
 
         @Override
@@ -130,9 +127,9 @@ public class ProductsActivity extends AppCompatActivity {
 
             }
 
-            holder.productName.get().setText(getItem(i).getProduct());
-            holder.productInStock.get().setText(getItem(i).getInStrock());
-            holder.leftIcon.get().setText(getItem(i).getProduct().substring(0, 1).toUpperCase());
+            holder.type.get().setText(getItem(i).getType());
+            holder.date.get().setText(getItem(i).getDate());
+            holder.leftIcon.get().setText(getItem(i).getType().substring(0, 1).toUpperCase());
 
             switch (i % 6) {
                 case 0:
@@ -169,14 +166,14 @@ public class ProductsActivity extends AppCompatActivity {
 
     public class ViewHolder {
 
-        public WeakReference<TextView> productName;
-        public WeakReference<TextView> productInStock;
+        public WeakReference<TextView> type;
+        public WeakReference<TextView> date;
         public WeakReference<TextView> leftIcon;
         public WeakReference<View> circularBackgroud;
 
         public ViewHolder(View view) {
-            productName = new WeakReference<TextView>((TextView) view.findViewById(R.id.name));
-            productInStock = new WeakReference<TextView>((TextView) view.findViewById(R.id.inStock));
+            type = new WeakReference<TextView>((TextView) view.findViewById(R.id.name));
+            date = new WeakReference<TextView>((TextView) view.findViewById(R.id.inStock));
             leftIcon = new WeakReference<TextView>((TextView) view.findViewById(R.id.leftIcon));
             circularBackgroud = new WeakReference<View>((View) view.findViewById(R.id.circularView));
         }

@@ -9,7 +9,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.grizly.stockapp.Config;
+import com.grizly.stockapp.Methods;
 import com.grizly.stockapp.R;
+import com.grizly.stockapp.beans.Product;
+
+import java.util.ArrayList;
 
 public class AddProductActivity extends AppCompatActivity {
 
@@ -37,7 +42,14 @@ public class AddProductActivity extends AppCompatActivity {
                         getQuantity_et().getText().toString().trim().length() < 1){
                     Toast.makeText(AddProductActivity.this, "Missing Fields", Toast.LENGTH_LONG).show();
                 }else{
+                    ArrayList<Product> productList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, AddProductActivity.this);
 
+                    productList.add(new Product(getQuantity_et().getText().toString(),
+                            getImage_et().getText().toString(),
+                            getProduct_et().getText().toString(),
+                            getProduct_et().getText().toString()));
+                    Methods.savePrefObject(productList, Config.PREF_KEY_LIST_PRODUCTS, AddProductActivity.this);
+                    finish();
                 }
             }
         });

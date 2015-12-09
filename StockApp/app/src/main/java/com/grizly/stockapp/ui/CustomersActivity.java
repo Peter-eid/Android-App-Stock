@@ -16,6 +16,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.grizly.stockapp.Config;
 import com.grizly.stockapp.R;
 import com.grizly.stockapp.beans.Customer;
 
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 public class CustomersActivity extends AppCompatActivity {
 
     public ArrayList<Customer> customerList = new ArrayList<Customer>();
+    public ArrayList<Customer> useCustomerList = new ArrayList<Customer>();
     public CustomerAdapter customerAdapter;
     public ListView customerLV;
 
@@ -38,7 +40,7 @@ public class CustomersActivity extends AppCompatActivity {
         title.setText("Customers");
         setSupportActionBar(toolbar);
 
-//        productList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, this);
+//      productList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, this);
         customerLV = (ListView) findViewById(R.id.list);
         customerAdapter = new CustomerAdapter(CustomersActivity.this, customerList);
         try {
@@ -46,16 +48,20 @@ public class CustomersActivity extends AppCompatActivity {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
 
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
-        customerList.add(new Customer("Michel Tabib", "", "70049308", "dev"));
+    @Override
+    public void onResume() {
+        customerList.clear();
+        useCustomerList.clear();
+        useCustomerList = Customer.getPrefArraylist(Config.PREF_KEY_LIST_CUSTOMERS, this);
+        for(int i = 0 ;  i < useCustomerList.size(); i++){
+            customerList.add((Customer)((useCustomerList).get(i)));
+        }
 
         customerAdapter.notifyDataSetChanged();
+
+        super.onResume();
     }
 
     @Override

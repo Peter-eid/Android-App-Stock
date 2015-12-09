@@ -9,12 +9,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.grizly.stockapp.Config;
+import com.grizly.stockapp.Methods;
 import com.grizly.stockapp.R;
+import com.grizly.stockapp.beans.Customer;
+
+import java.util.ArrayList;
 
 public class AddCustomerActivity extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_customer);
 
@@ -33,21 +38,28 @@ public class AddCustomerActivity extends AppCompatActivity {
         getCreate_btn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getProduct_et().getText().toString().trim().length() < 1 ||
-                        getQuantity_et().getText().toString().trim().length() < 1){
+                if(getFullName_et().getText().toString().trim().length() < 1 ||
+                        getPhoneNumber_et().getText().toString().trim().length() < 1){
                     Toast.makeText(AddCustomerActivity.this, "Missing Fields", Toast.LENGTH_LONG).show();
                 }else{
+                    ArrayList<Customer> customerList = Customer.getPrefArraylist(Config.PREF_KEY_LIST_CUSTOMERS, AddCustomerActivity.this);
 
+                    customerList.add(new Customer(getFullName_et().getText().toString(),
+                            getImage_et().getText().toString(),
+                            getPhoneNumber_et().getText().toString(),
+                            ""));
+                    Methods.savePrefObject(customerList, Config.PREF_KEY_LIST_CUSTOMERS, AddCustomerActivity.this);
+                    finish();
                 }
             }
         });
     }
 
-    public AppCompatEditText getProduct_et(){
+    public AppCompatEditText getFullName_et(){
         return (AppCompatEditText) findViewById(R.id.product_id);
     }
 
-    public AppCompatEditText getQuantity_et(){
+    public AppCompatEditText getPhoneNumber_et(){
         return (AppCompatEditText) findViewById(R.id.quantity_et);
     }
     public AppCompatEditText getImage_et(){

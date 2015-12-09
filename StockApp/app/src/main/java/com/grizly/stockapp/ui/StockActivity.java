@@ -49,7 +49,8 @@ public class StockActivity extends AppCompatActivity {
         getMore_iv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(StockActivity.this, HistoryActivity.class);
+                startActivity(intent);
             }
         });
     }

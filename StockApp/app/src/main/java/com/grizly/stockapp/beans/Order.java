@@ -14,6 +14,14 @@ public class Order {
     String type;
     String date;
 
+    public String getType() {
+        return type;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
     public Order(String type, String date) {
         this.type = type;
         this.date = date;

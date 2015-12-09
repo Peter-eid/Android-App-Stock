@@ -2,6 +2,8 @@ package com.grizly.stockapp.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -10,18 +12,31 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.grizly.stockapp.Config;
+import com.grizly.stockapp.Methods;
 import com.grizly.stockapp.R;
+import com.grizly.stockapp.beans.Order;
 import com.grizly.stockapp.beans.SpinnerItem;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class OrderActivity extends AppCompatActivity {
 
+    public ArrayList<Order> orderList = new ArrayList<Order>();
+    public ArrayList<Order> useorderList = new ArrayList<Order>();
+
     List<SpinnerItem> productlist = new ArrayList<SpinnerItem>();
     SpinnerAdapter orderAdapter;
     Spinner spinner;
+
+    AppCompatEditText name, type;
+    AppCompatButton btn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +45,10 @@ public class OrderActivity extends AppCompatActivity {
         AppCompatTextView title = (AppCompatTextView) toolbar.findViewById(R.id.title);
         title.setText("Create Order");
         setSupportActionBar(toolbar);
+
+        name = (AppCompatEditText) findViewById(R.id.customer_et);
+        type = (AppCompatEditText) findViewById(R.id.type_et);
+        btn = (AppCompatButton) findViewById(R.id.register);
 
 //        productlist = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, OrderActivity.this);
         productlist.add(new SpinnerItem("1", "Pen"));
@@ -41,6 +60,22 @@ public class OrderActivity extends AppCompatActivity {
         orderAdapter.addItems(productlist);
         spinner = (Spinner) findViewById(R.id.product_spinner);
         spinner.setAdapter(orderAdapter);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(name.getText().toString().trim().length() <1 ||
+                        type.getText().toString().trim().length() <1){
+                    Toast.makeText(OrderActivity.this, "Missing Fields", Toast.LENGTH_SHORT).show();
+                }else{
+                    ArrayList<Order> orderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
+
+                    orderList.add(new Order(type.getText().toString(), DateFormat.getDateTimeInstance().format(new Date())));
+                    Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
+                    finish();
+                }
+            }
+        });
 
     }
 
@@ -103,7 +138,7 @@ public class OrderActivity extends AppCompatActivity {
         }
 
         private String getTitle(int position) {
-            return position >= 0 && position < mItems.size() ? mItems.get(position).name: "";
+            return position >= 0 && position < mItems.size() ? mItems.get(position).name : "";
         }
     }
 }

@@ -40,6 +40,7 @@ public class Customer {
     public String getRole() {
         return role;
     }
+
     static public ArrayList getPrefArraylist(String Key, Context context) {
         ArrayList<Customer> list = null;
         try {
