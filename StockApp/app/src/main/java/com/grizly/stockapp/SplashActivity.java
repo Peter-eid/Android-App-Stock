@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.grizly.stockapp.beans.Customer;
 import com.grizly.stockapp.beans.Order;
 import com.grizly.stockapp.beans.Product;
+import com.grizly.stockapp.beans.SpinnerItem;
 import com.grizly.stockapp.beans.User;
 import com.grizly.stockapp.ui.LoginActivity;
 import com.grizly.stockapp.ui.RegisterActivity;
@@ -20,6 +21,8 @@ public class SplashActivity extends AppCompatActivity {
     ArrayList<Order> orderList = new ArrayList<>();
     ArrayList<Product> productList = new ArrayList<>();
     ArrayList<User> userList = new ArrayList<>();
+    ArrayList<SpinnerItem> spinnerList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +40,8 @@ public class SplashActivity extends AppCompatActivity {
                     Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, SplashActivity.this);
                     Methods.savePrefObject(productList, Config.PREF_KEY_LIST_PRODUCTS, SplashActivity.this);
                     Methods.savePrefObject(userList, Config.PREF_KEY_LIST_USERS, SplashActivity.this);
+                    Methods.savePrefObject(spinnerList, Config.PREF_KEY_LIST_SPINNER, SplashActivity.this);
+
 
                     Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
                     startActivity(intent);

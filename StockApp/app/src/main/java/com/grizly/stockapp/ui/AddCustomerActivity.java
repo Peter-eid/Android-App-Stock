@@ -28,12 +28,13 @@ public class AddCustomerActivity extends AppCompatActivity {
         title.setText("New Customer");
         setSupportActionBar(toolbar);
 
-        getCreate_btn().setOnClickListener(new View.OnClickListener() {
+        getCancel_btn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+
 
         getCreate_btn().setOnClickListener(new View.OnClickListener() {
             @Override

@@ -30,7 +30,7 @@ public class OrderActivity extends AppCompatActivity {
     public ArrayList<Order> orderList = new ArrayList<Order>();
     public ArrayList<Order> useorderList = new ArrayList<Order>();
 
-    List<SpinnerItem> productlist = new ArrayList<SpinnerItem>();
+    ArrayList productlist = new ArrayList<SpinnerItem>();
     SpinnerAdapter orderAdapter;
     Spinner spinner;
 
@@ -50,11 +50,11 @@ public class OrderActivity extends AppCompatActivity {
         type = (AppCompatEditText) findViewById(R.id.type_et);
         btn = (AppCompatButton) findViewById(R.id.register);
 
-//        productlist = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, OrderActivity.this);
-        productlist.add(new SpinnerItem("1", "Pen"));
-        productlist.add(new SpinnerItem("1", "Pencil"));
-        productlist.add(new SpinnerItem("1", "laptop"));
-        productlist.add(new SpinnerItem("1", "Dossier"));
+        productlist = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_SPINNER, OrderActivity.this);
+//        productlist.add(new SpinnerItem("1", "Pen"));
+//        productlist.add(new SpinnerItem("1", "Pencil"));
+//        productlist.add(new SpinnerItem("1", "laptop"));
+//        productlist.add(new SpinnerItem("1", "Dossier"));
 
         orderAdapter = new SpinnerAdapter();
         orderAdapter.addItems(productlist);
@@ -64,10 +64,10 @@ public class OrderActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(name.getText().toString().trim().length() <1 ||
-                        type.getText().toString().trim().length() <1){
+                if (name.getText().toString().trim().length() < 1 ||
+                        type.getText().toString().trim().length() < 1) {
                     Toast.makeText(OrderActivity.this, "Missing Fields", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     ArrayList<Order> orderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
 
                     orderList.add(new Order(type.getText().toString(), DateFormat.getDateTimeInstance().format(new Date())));
@@ -77,6 +77,7 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
+        orderAdapter.notifyDataSetChanged();
     }
 
     public class SpinnerAdapter extends BaseAdapter {

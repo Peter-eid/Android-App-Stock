@@ -13,6 +13,7 @@ import com.grizly.stockapp.Config;
 import com.grizly.stockapp.Methods;
 import com.grizly.stockapp.R;
 import com.grizly.stockapp.beans.Product;
+import com.grizly.stockapp.beans.SpinnerItem;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,20 @@ public class AddProductActivity extends AppCompatActivity {
                     Toast.makeText(AddProductActivity.this, "Missing Fields", Toast.LENGTH_LONG).show();
                 }else{
                     ArrayList<Product> productList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, AddProductActivity.this);
+                    ArrayList<SpinnerItem> spinnerItemList = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_SPINNER, AddProductActivity.this);
+
+                    String hh = getProduct_et().getText().toString();
+                    spinnerItemList.add(new SpinnerItem(
+                            getProduct_et().getText().toString(),
+                            getProduct_et().getText().toString()));
 
                     productList.add(new Product(getQuantity_et().getText().toString(),
                             getImage_et().getText().toString(),
                             getProduct_et().getText().toString(),
                             getProduct_et().getText().toString()));
                     Methods.savePrefObject(productList, Config.PREF_KEY_LIST_PRODUCTS, AddProductActivity.this);
+                    Methods.savePrefObject(spinnerItemList, Config.PREF_KEY_LIST_SPINNER, AddProductActivity.this);
+
                     finish();
                 }
             }
