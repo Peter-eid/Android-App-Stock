@@ -30,9 +30,12 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(getUsername_et().getText().toString().trim().length() < 1
-                        || getPassword_et().getText().toString().trim().length() < 1){
+                        || getPassword_et().getText().toString().trim().length() < 1)
+                {
                     Toast.makeText(RegisterActivity.this, "Missing Fields", Toast.LENGTH_LONG).show();
-                }else{
+                }
+                else
+                {
                     Methods.savePre(RegisterActivity.this, getUsername_et().getText().toString().trim(), Config.PREF_KEY_USERNAME);
                     Methods.savePre(RegisterActivity.this, getPassword_et().getText().toString().trim(), Config.PREF_KEY_PASSWORD);
                     Methods.savePre(RegisterActivity.this, "1", Config.PREF_KEY_REGISTERED);
