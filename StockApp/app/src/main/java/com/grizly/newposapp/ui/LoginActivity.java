@@ -22,6 +22,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -85,13 +89,22 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         String resp = response.body();
                         try {
-                            // do your work after hit being successfull
-                            Intent intent = new Intent(LoginActivity.this, StockActivity.class);
-                            startActivity(intent);
-                            finish();
 
-                        } catch (Exception e) {
-
+                            JSONObject json = new JSONObject(resp);
+                            Boolean json_result= json.getBoolean("result");
+                            if(json_result){
+                                Intent intent = new Intent(LoginActivity.this, StockActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            else {
+                                JSONObject json_error = json.getJSONObject("errors");
+                                JSONArray json_details = json_error.getJSONArray("details");
+                                Toast.makeText(LoginActivity.this, json_details.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        catch (JSONException e) {
+                            Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Toast.makeText(LoginActivity.this, "Invalid or missing fields", Toast.LENGTH_LONG).show();
