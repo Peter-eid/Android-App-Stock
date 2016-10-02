@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.grizly.stockapp">
-
+    package="com.grizly.newposapp">
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@drawable/app_icon"
@@ -49,8 +49,7 @@
         <activity
             android:name=".ui.AddCustomerActivity"
             android:label="@string/title_activity_add_customer"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.HistoryActivity"
             android:label="@string/title_activity_order"
