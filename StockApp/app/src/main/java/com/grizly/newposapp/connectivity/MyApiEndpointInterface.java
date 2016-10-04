@@ -30,7 +30,7 @@ public interface MyApiEndpointInterface {
     @POST("/operation")
     Call<String> addOperation(@Body String body);
 
-    @DELETE("/product/{id}")
+    @DELETE("/operation/{id}")
     Call<String> deleteOperation(@Path("id") String id);
 
 }
