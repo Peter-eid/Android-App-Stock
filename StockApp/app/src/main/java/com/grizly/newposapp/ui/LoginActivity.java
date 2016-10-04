@@ -46,15 +46,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 login(getUsername_et().getText().toString(), getPassword_et().getText().toString());
-//                if (getUsername_et().getText().toString().equals(Methods.getPref(LoginActivity.this, Config.PREF_KEY_USERNAME))
-//                        && getPassword_et().getText().toString().equals(Methods.getPref(LoginActivity.this, Config.PREF_KEY_PASSWORD))) {
-//
-//                    Intent intent = new Intent(LoginActivity.this, StockActivity.class);
-//                    startActivity(intent);
-//                    finish();
-//                } else {
-//                    Toast.makeText(LoginActivity.this, "Invalid or missing fields", Toast.LENGTH_LONG).show();
-//                }
             }
         });
     }
