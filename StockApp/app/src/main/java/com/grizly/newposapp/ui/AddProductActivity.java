@@ -29,7 +29,7 @@ public class AddProductActivity extends AppCompatActivity {
         title.setText("New Product");
         setSupportActionBar(toolbar);
 
-        getCreate_btn().setOnClickListener(new View.OnClickListener() {
+        getCancel_btn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
