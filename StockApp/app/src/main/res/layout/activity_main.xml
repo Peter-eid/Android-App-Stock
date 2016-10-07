@@ -23,7 +23,9 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/toolbarContainer">
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <RelativeLayout
             android:id="@+id/scrollable_rl"
@@ -36,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="20dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="80dp"
                 android:src="@drawable/order" />
 
             <android.support.v7.widget.AppCompatEditText
@@ -146,22 +148,53 @@
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/register"
-                android:layout_width="fill_parent"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/view5"
                 android:layout_marginBottom="40dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:background="@drawable/selector_primary_dark"
                 android:gravity="center_horizontal"
                 android:padding="15dp"
                 android:text="Register"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignLeft="@+id/view5"
+                android:layout_alignStart="@+id/view5" />
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/signin"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/view5"
+                android:layout_marginBottom="40dp"
+                android:background="@drawable/selector_rect_blue"
+                android:gravity="center_horizontal"
+                android:padding="15dp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_alignRight="@+id/view5"
+                android:layout_alignEnd="@+id/view5"
+                android:onClick=""
+                android:text="or sign in" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99FFFFFF"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            />
+    </RelativeLayout>
 </RelativeLayout>
 
