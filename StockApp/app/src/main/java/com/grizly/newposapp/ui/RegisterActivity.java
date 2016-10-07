@@ -10,13 +10,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.grizly.newposapp.Config;
 import com.grizly.newposapp.Methods;
 import com.grizly.newposapp.R;
+import com.grizly.newposapp.beans.RegisterRequest;
+import com.grizly.newposapp.beans.UserRequest;
+import com.grizly.newposapp.connectivity.Factory;
+import com.grizly.newposapp.connectivity.MyApiEndpointInterface;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class RegisterActivity extends AppCompatActivity {
-
+    MyApiEndpointInterface apiCall;
+    Call<String> call;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,16 +57,72 @@ public class RegisterActivity extends AppCompatActivity {
                     Methods.savePre(RegisterActivity.this, getLastName_et().getText().toString().trim(), Config.PREF_KEY_LASTNAME);
                     Methods.savePre(RegisterActivity.this, getEmail_et().getText().toString().trim(), Config.PREF_KEY_EMAIL);
                     Methods.savePre(RegisterActivity.this, "1", Config.PREF_KEY_REGISTERED);
-
-                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    Register(getUsername_et().getText().toString(), getPassword_et().getText().toString(),getFirstName_et().getText().toString(),getLastName_et().getText().toString(),getEmail_et().getText().toString());
                 }
+            }
+        });
+
+        getSignin_btn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
     }
 
+    public void Register(String username, String password, String firstName, String lastName, String email) {
+
+        apiCall = Factory.create();
+
+        UserRequest userRequest = new UserRequest(username,password,firstName,lastName,email);
+        RegisterRequest registerRequest = new RegisterRequest();
+        final Gson gson1 = new Gson();
+        String post = gson1.toJson(registerRequest.withUser(userRequest));
+        try {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+            call = apiCall.addUser(post);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    if (response.code() == 200) {
+                        String resp = response.body();
+                        try {
+
+                            JSONObject json = new JSONObject(resp);
+                            Boolean json_result = json.getBoolean("result");
+                            if (json_result) {
+                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                JSONObject json_error = json.getJSONObject("errors");
+                                JSONArray json_details = json_error.getJSONArray("details");
+                                JSONObject jsonCodeMsg = json_details.getJSONObject(0);
+                                String msg = jsonCodeMsg.optString("message");
+                                Toast.makeText(RegisterActivity.this, msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(RegisterActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(RegisterActivity.this, "Invalid or missing fields", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    Toast.makeText(RegisterActivity.this, "Error While Reaching The Server", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public AppCompatEditText getUsername_et() {
         return (AppCompatEditText) findViewById(R.id.username);
     }
@@ -75,6 +145,9 @@ public class RegisterActivity extends AppCompatActivity {
 
     public AppCompatButton getRegister_btn() {
         return (AppCompatButton) findViewById(R.id.register);
+    }
+    public AppCompatButton getSignin_btn() {
+        return (AppCompatButton) findViewById(R.id.signin);
     }
 
 }
