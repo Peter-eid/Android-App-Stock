@@ -45,7 +45,21 @@ public class LoginActivity extends AppCompatActivity {
         getLogin_btn().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login(getUsername_et().getText().toString(), getPassword_et().getText().toString());
+                if (getUsername_et().getText().toString().trim().length() < 1
+                        || getPassword_et().getText().toString().trim().length() < 1) {
+                    Toast.makeText(LoginActivity.this, "Missing Fields", Toast.LENGTH_LONG).show();
+                } else {
+                    login(getUsername_et().getText().toString(), getPassword_et().getText().toString());
+                }
+            }
+        });
+
+        getGoToRegister_btn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -62,6 +76,10 @@ public class LoginActivity extends AppCompatActivity {
         return (AppCompatButton) findViewById(R.id.login);
     }
 
+    public AppCompatButton getGoToRegister_btn() {
+        return (AppCompatButton) findViewById(R.id.goToRegister);
+    }
+
     public void login(String username, String password) {
 
         apiCall = Factory.create();
@@ -73,28 +91,30 @@ public class LoginActivity extends AppCompatActivity {
         final Gson gson1 = new Gson();
         String post = gson1.toJson(loginRequest).toString();
         try {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
             call = apiCall.login(post);//testPost
             call.enqueue(new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
                     if (response.code() == 200) {
                         String resp = response.body();
                         try {
 
                             JSONObject json = new JSONObject(resp);
-                            Boolean json_result= json.getBoolean("result");
-                            if(json_result){
+                            Boolean json_result = json.getBoolean("result");
+                            if (json_result) {
                                 Intent intent = new Intent(LoginActivity.this, StockActivity.class);
                                 startActivity(intent);
                                 finish();
-                            }
-                            else {
+                            } else {
                                 JSONObject json_error = json.getJSONObject("errors");
                                 JSONArray json_details = json_error.getJSONArray("details");
-                                Toast.makeText(LoginActivity.this, json_details.toString(), Toast.LENGTH_LONG).show();
+                                JSONObject jsonCodeMsg = json_details.getJSONObject(0);
+                                String msg = jsonCodeMsg.optString("message");
+                                Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_LONG).show();
                             }
-                        }
-                        catch (JSONException e) {
+                        } catch (JSONException e) {
                             Toast.makeText(LoginActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                         }
                     } else {
@@ -104,7 +124,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<String> call, Throwable t) {
-
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    Toast.makeText(LoginActivity.this, "Error While Reaching The Server", Toast.LENGTH_LONG).show();
                 }
             });
         } catch (Exception e) {
