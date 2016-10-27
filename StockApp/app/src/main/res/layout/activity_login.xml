@@ -119,7 +119,9 @@
                 android:layout_alignEnd="@+id/view2" />
 
         </RelativeLayout>
+
     </android.support.v4.widget.NestedScrollView>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"

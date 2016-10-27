@@ -28,6 +28,7 @@ public class Factory {
                 try {
                     request = chain.request().newBuilder()
                             .addHeader("Content-Type", "application/json")
+                            .addHeader("Accept", "application/json")
                             .build();
                 } catch (Exception e) {
                     e.printStackTrace();
