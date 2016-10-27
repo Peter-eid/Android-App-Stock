@@ -26,12 +26,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.SharedPreferences;
+
 
 public class LoginActivity extends AppCompatActivity {
 
     MyApiEndpointInterface apiCall;
     Call<String> call;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,10 +101,13 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         String resp = response.body();
                         try {
-
                             JSONObject json = new JSONObject(resp);
                             Boolean json_result = json.getBoolean("result");
                             if (json_result) {
+                                JSONObject json_data = json.getJSONObject("data");
+                                int json_privilege = json_data.optInt("privilege");
+                                String priv = Integer.toString(json_privilege);
+                                Methods.savePre(LoginActivity.this, priv, Config.PREF_KEY_REGISTERED);
                                 Intent intent = new Intent(LoginActivity.this, StockActivity.class);
                                 startActivity(intent);
                                 finish();

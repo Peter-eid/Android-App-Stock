@@ -23,13 +23,13 @@ public class StockActivity extends AppCompatActivity {
         title.setText("Stock");
         setSupportActionBar(toolbar);
 
-        getCustomer_iv().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StockActivity.this, CustomersActivity.class);
-                startActivity(intent);
-            }
-        });
+//        getCustomer_iv().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent(StockActivity.this, CustomersActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         getProduct_iv().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,9 +60,9 @@ public class StockActivity extends AppCompatActivity {
         return (ImageView) findViewById(R.id.product);
     }
 
-    public ImageView getCustomer_iv() {
-        return (ImageView) findViewById(R.id.customer);
-    }
+//    public ImageView getCustomer_iv() {
+//        return (ImageView) findViewById(R.id.customer);
+//    }
 
     public ImageView getOrder_iv() {
         return (ImageView) findViewById(R.id.order);
