@@ -13,16 +13,18 @@ import java.util.ArrayList;
 
 public class Product {
 
-    String inStrock;
+    String inStock;
     String barcode;
     String imageUrl;
     String product;
+    String pid;
 
-    public Product(String inStrock, String imageUrl, String barcode, String product) {
-        this.inStrock = inStrock;
+    public Product(String inStock, String imageUrl, String barcode, String product, String pid) {
+        this.inStock = inStock;
         this.imageUrl = imageUrl;
         this.barcode = barcode;
         this.product = product;
+        this.pid = pid;
     }
 
     public String getBarcode() {
@@ -37,8 +39,12 @@ public class Product {
         return product;
     }
 
-    public String getInStrock() {
-        return inStrock;
+    public String getInStock() {
+        return inStock;
+
+    }
+    public String getPid() {
+        return pid;
 
     }
 

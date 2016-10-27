@@ -63,10 +63,26 @@
         android:textSize="16sp" />
 
     <android.support.v7.widget.AppCompatEditText
-        android:id="@+id/image_et"
+        android:id="@+id/barcode_et"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/quantity_et"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rect_shape"
+        android:gravity="center_horizontal"
+        android:hint="Barcode"
+        android:maxLength="30"
+        android:padding="16dp"
+        android:textSize="16sp" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/image_et"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/barcode_et"
         android:layout_centerInParent="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
@@ -120,6 +136,18 @@
             android:textStyle="bold" />
 
     </LinearLayout>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loadingPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99FFFFFF"
+        android:gravity="center"
+        android:visibility="gone">
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true" />
+    </RelativeLayout>
 </RelativeLayout>
 
