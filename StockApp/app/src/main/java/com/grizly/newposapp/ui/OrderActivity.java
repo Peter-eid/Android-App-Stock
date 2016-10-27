@@ -3,7 +3,6 @@ package com.grizly.newposapp.ui;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -14,28 +13,49 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.grizly.newposapp.Config;
 import com.grizly.newposapp.Methods;
 import com.grizly.newposapp.R;
 import com.grizly.newposapp.beans.Order;
+import com.grizly.newposapp.beans.Operation;
+import com.grizly.newposapp.beans.OperationRequest;
 import com.grizly.newposapp.beans.SpinnerItem;
+import com.grizly.newposapp.connectivity.Factory;
+import com.grizly.newposapp.connectivity.MyApiEndpointInterface;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class OrderActivity extends AppCompatActivity {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+public class OrderActivity extends AppCompatActivity {
+    MyApiEndpointInterface apiCall;
+    Call<String> call;
     public ArrayList<Order> orderList = new ArrayList<Order>();
     public ArrayList<Order> useorderList = new ArrayList<Order>();
 
     ArrayList productlist = new ArrayList<SpinnerItem>();
+    ArrayList typeList = new ArrayList<SpinnerItem>();
+    ArrayList custList = new ArrayList<SpinnerItem>();
     SpinnerAdapter orderAdapter;
+    SpinnerAdapter typeAdapter;
+    SpinnerAdapter custAdapter;
     Spinner spinner;
+    Spinner typeSpinner;
+    Spinner custSpinner;
 
-    AppCompatEditText name, type;
     AppCompatButton btn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,33 +66,52 @@ public class OrderActivity extends AppCompatActivity {
         title.setText("Create Order");
         setSupportActionBar(toolbar);
 
-        name = (AppCompatEditText) findViewById(R.id.customer_et);
-        type = (AppCompatEditText) findViewById(R.id.type_et);
+
         btn = (AppCompatButton) findViewById(R.id.register);
 
         productlist = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_SPINNER, OrderActivity.this);
-//        productlist.add(new SpinnerItem("1", "Pen"));
-//        productlist.add(new SpinnerItem("1", "Pencil"));
-//        productlist.add(new SpinnerItem("1", "laptop"));
-//        productlist.add(new SpinnerItem("1", "Dossier"));
+        custList = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_USERS_SPINNER, OrderActivity.this);
+        typeList.add(new SpinnerItem("0", "Take"));
+        typeList.add(new SpinnerItem("1", "Borrow"));
 
         orderAdapter = new SpinnerAdapter();
+        typeAdapter = new SpinnerAdapter();
+        custAdapter = new SpinnerAdapter();
         orderAdapter.addItems(productlist);
+        typeAdapter.addItems(typeList);
+        custAdapter.addItems(custList);
         spinner = (Spinner) findViewById(R.id.product_spinner);
+        typeSpinner = (Spinner) findViewById(R.id.type_sp);
+        custSpinner = (Spinner) findViewById(R.id.customer_sp);
         spinner.setAdapter(orderAdapter);
+        typeSpinner.setAdapter(typeAdapter);
+        custSpinner.setAdapter(custAdapter);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (name.getText().toString().trim().length() < 1 ||
-                        type.getText().toString().trim().length() < 1) {
-                    Toast.makeText(OrderActivity.this, "Missing Fields", Toast.LENGTH_SHORT).show();
-                } else {
-                    ArrayList<Order> orderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
+                Object customer = custSpinner.getSelectedItem();
+                Object type = typeSpinner.getSelectedItem();
+                Object product = spinner.getSelectedItem();
+                Gson gson = new Gson();
+                String cust_json = gson.toJson(customer);
+                String prod_json = gson.toJson(product);
+                String type_json = gson.toJson(type);
+                try {
+                    JSONObject cust = new JSONObject(cust_json);
+                    String cust_id = cust.optString("id");
+                    String cust_name = cust.optString("name");
 
-                    orderList.add(new Order(type.getText().toString(), DateFormat.getDateTimeInstance().format(new Date())));
-                    Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
-                    finish();
+                    JSONObject prod = new JSONObject(prod_json);
+                    String prod_id = prod.optString("id");
+                    String prod_name = prod.optString("name");
+
+                    JSONObject typ = new JSONObject(type_json);
+                    String type_id = typ.optString("id");
+                    String type_name = typ.optString("name");
+                    createOrderRequest(prod_id,prod_name,cust_id,cust_name,type_id,type_name);
+                } catch (JSONException e) {
+                    Toast.makeText(OrderActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -129,8 +168,7 @@ public class OrderActivity extends AppCompatActivity {
         public View getView(int position, View view, ViewGroup parent) {
             if (view == null || !view.getTag().toString().equals("NON_DROPDOWN")) {
                 mInflater = LayoutInflater.from(OrderActivity.this);
-                view = mInflater.inflate(R.layout.
-                        spinner_item, parent, false);
+                view = mInflater.inflate(R.layout.spinner_item, parent, false);
                 view.setTag("NON_DROPDOWN");
             }
             TextView textView = (TextView) view.findViewById(R.id.item_text);
@@ -142,4 +180,58 @@ public class OrderActivity extends AppCompatActivity {
             return position >= 0 && position < mItems.size() ? mItems.get(position).name : "";
         }
     }
+
+    public void createOrderRequest(String pid, final String pn, String uid, final String un, String tid, final String tn) {
+        apiCall = Factory.create();
+//        10/5/16, 9:22:22 PM
+       final String date = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.MEDIUM).format(new Date());
+        Operation oneOperation = new Operation(uid, pid, "1", tid, date);
+        OperationRequest operationRequest = new OperationRequest();
+        final Gson gson1 = new Gson();
+        String post = gson1.toJson(operationRequest.withOperation(oneOperation));
+        try {
+            findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+            call = apiCall.addOperation(post);
+            call.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    if (response.code() == 200) {
+                        String resp = response.body();
+                        try {
+                            JSONObject json = new JSONObject(resp);
+                            Boolean json_result = json.getBoolean("result");
+                            if (json_result) {
+                                JSONObject json_data = json.getJSONObject("data");
+                                String json_oid = json_data.optString("_id");
+                                ArrayList<Order> orderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
+                                orderList.add(new Order(json_oid,un, pn, tn, date));
+                                Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
+                                finish();
+                            } else {
+                                JSONObject json_error = json.getJSONObject("errors");
+                                JSONArray json_details = json_error.getJSONArray("details");
+                                JSONObject jsonCodeMsg = json_details.getJSONObject(0);
+                                String msg = jsonCodeMsg.optString("message");
+                                Toast.makeText(OrderActivity.this, msg, Toast.LENGTH_LONG).show();
+                            }
+                        } catch (JSONException e) {
+                            Toast.makeText(OrderActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        Toast.makeText(OrderActivity.this, "Invalid or missing fields", Toast.LENGTH_LONG).show();
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    Toast.makeText(OrderActivity.this, "Error While Reaching The Server", Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }
