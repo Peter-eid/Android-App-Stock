@@ -15,6 +15,7 @@ import com.grizly.newposapp.Config;
 import com.grizly.newposapp.Methods;
 import com.grizly.newposapp.R;
 import com.grizly.newposapp.beans.LoginRequest;
+import com.grizly.newposapp.beans.SpinnerItem;
 import com.grizly.newposapp.connectivity.Factory;
 import com.grizly.newposapp.connectivity.MyApiEndpointInterface;
 
@@ -28,6 +29,8 @@ import org.json.JSONObject;
 
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        Methods.clearPref(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         AppCompatTextView title = (AppCompatTextView) toolbar.findViewById(R.id.title);
         title.setText("Login");
@@ -81,7 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         return (AppCompatButton) findViewById(R.id.goToRegister);
     }
 
-    public void login(String username, String password) {
+    public void login(final String username, String password) {
 
         apiCall = Factory.create();
 
@@ -106,8 +109,17 @@ public class LoginActivity extends AppCompatActivity {
                             if (json_result) {
                                 JSONObject json_data = json.getJSONObject("data");
                                 int json_privilege = json_data.optInt("privilege");
+                                String json_uid = json_data.optString("uid");
                                 String priv = Integer.toString(json_privilege);
                                 Methods.savePre(LoginActivity.this, priv, Config.PREF_KEY_REGISTERED);
+                                //todo add all users return from login response
+                                ArrayList<SpinnerItem> spinnerItemList = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_USERS_SPINNER, LoginActivity.this);
+                                if(spinnerItemList == null){
+                                    spinnerItemList = new ArrayList<>();
+                                }
+                                SpinnerItem userName = new SpinnerItem(json_uid, username);
+                                spinnerItemList.add(userName);
+                                Methods.savePrefObject(spinnerItemList, Config.PREF_KEY_LIST_USERS_SPINNER, LoginActivity.this);
                                 Intent intent = new Intent(LoginActivity.this, StockActivity.class);
                                 startActivity(intent);
                                 finish();

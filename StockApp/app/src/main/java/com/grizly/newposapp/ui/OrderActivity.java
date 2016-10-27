@@ -77,9 +77,13 @@ public class OrderActivity extends AppCompatActivity {
         orderAdapter = new SpinnerAdapter();
         typeAdapter = new SpinnerAdapter();
         custAdapter = new SpinnerAdapter();
-        orderAdapter.addItems(productlist);
+        if(productlist != null && !productlist.isEmpty()){
+            orderAdapter.addItems(productlist);
+        }
         typeAdapter.addItems(typeList);
-        custAdapter.addItems(custList);
+        if(custList != null && !custList.isEmpty()){
+            custAdapter.addItems(custList);
+        }
         spinner = (Spinner) findViewById(R.id.product_spinner);
         typeSpinner = (Spinner) findViewById(R.id.type_sp);
         custSpinner = (Spinner) findViewById(R.id.customer_sp);

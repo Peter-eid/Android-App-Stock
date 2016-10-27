@@ -100,7 +100,6 @@ public class RegisterActivity extends AppCompatActivity {
                                 Methods.savePre(RegisterActivity.this, getLastName_et().getText().toString().trim(), Config.PREF_KEY_LASTNAME);
                                 Methods.savePre(RegisterActivity.this, getEmail_et().getText().toString().trim(), Config.PREF_KEY_EMAIL);
                                 Methods.savePre(RegisterActivity.this, "1", Config.PREF_KEY_REGISTERED);
-                                String name = firstName + " " + lastName;
                                 ArrayList<SpinnerItem> spinnerItemList = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_USERS_SPINNER, RegisterActivity.this);
                                 if(spinnerItemList == null){
                                     spinnerItemList = new ArrayList<>();

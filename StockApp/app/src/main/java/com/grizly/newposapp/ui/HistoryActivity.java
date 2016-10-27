@@ -147,11 +147,16 @@ public class HistoryActivity extends AppCompatActivity {
         orderList.clear();
         useorderList.clear();
         useorderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, this);
-        for(int i = 0 ;  i < useorderList.size(); i++){
+        int size = 0;
+        if(useorderList != null && !useorderList.isEmpty()){
+           size = useorderList.size();
+        }
+        for(int i = 0 ;  i < size; i++){
             orderList.add((Order) ((useorderList).get(i)));
         }
-        productAdapter.notifyDataSetChanged();
-
+        if (size > 0){
+            productAdapter.notifyDataSetChanged();
+        }
         super.onResume();
     }
 
