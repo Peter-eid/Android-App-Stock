@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Methods.clearPref(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         AppCompatTextView title = (AppCompatTextView) toolbar.findViewById(R.id.title);
         title.setText("Login");
@@ -113,13 +112,15 @@ public class LoginActivity extends AppCompatActivity {
                                 String priv = Integer.toString(json_privilege);
                                 Methods.savePre(LoginActivity.this, priv, Config.PREF_KEY_REGISTERED);
                                 //todo add all users return from login response
+
                                 ArrayList<SpinnerItem> spinnerItemList = SpinnerItem.getPrefArraylist(Config.PREF_KEY_LIST_USERS_SPINNER, LoginActivity.this);
-                                if(spinnerItemList == null){
+                                if(spinnerItemList == null || spinnerItemList.size() == 1){
                                     spinnerItemList = new ArrayList<>();
                                 }
                                 SpinnerItem userName = new SpinnerItem(json_uid, username);
                                 spinnerItemList.add(userName);
                                 Methods.savePrefObject(spinnerItemList, Config.PREF_KEY_LIST_USERS_SPINNER, LoginActivity.this);
+
                                 Intent intent = new Intent(LoginActivity.this, StockActivity.class);
                                 startActivity(intent);
                                 finish();

@@ -32,17 +32,17 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(new Runnable() {
             public void run() {
+                Methods.savePrefObject(customerList, Config.PREF_KEY_LIST_CUSTOMERS, SplashActivity.this);
+                Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, SplashActivity.this);
+                Methods.savePrefObject(productList, Config.PREF_KEY_LIST_PRODUCTS, SplashActivity.this);
+                Methods.savePrefObject(userList, Config.PREF_KEY_LIST_USERS, SplashActivity.this);
+                Methods.savePrefObject(spinnerList, Config.PREF_KEY_LIST_SPINNER, SplashActivity.this);
+                Methods.savePrefObject(userSpinnerList, Config.PREF_KEY_LIST_USERS_SPINNER, SplashActivity.this);
                 if (Methods.getPref(SplashActivity.this, Config.PREF_KEY_REGISTERED).equals("1") || Methods.getPref(SplashActivity.this, Config.PREF_KEY_REGISTERED).equals("0")) {
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }else{
-                    Methods.savePrefObject(customerList, Config.PREF_KEY_LIST_CUSTOMERS, SplashActivity.this);
-                    Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, SplashActivity.this);
-                    Methods.savePrefObject(productList, Config.PREF_KEY_LIST_PRODUCTS, SplashActivity.this);
-                    Methods.savePrefObject(userList, Config.PREF_KEY_LIST_USERS, SplashActivity.this);
-                    Methods.savePrefObject(spinnerList, Config.PREF_KEY_LIST_SPINNER, SplashActivity.this);
-                    Methods.savePrefObject(userSpinnerList, Config.PREF_KEY_LIST_USERS_SPINNER, SplashActivity.this);
                     Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
                     startActivity(intent);
                     finish();

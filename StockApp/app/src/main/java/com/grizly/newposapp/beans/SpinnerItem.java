@@ -19,7 +19,7 @@ public class SpinnerItem {
         this.name = name;
     }
     static public ArrayList getPrefArraylist(String Key, Context context) {
-        ArrayList<SpinnerItem> list = null;
+        ArrayList<SpinnerItem> list = new ArrayList<SpinnerItem>();
         try {
             SharedPreferences settings = context.getSharedPreferences(Config.PREFS_NAME, 0);
             Gson gson = new Gson();
