@@ -17,5 +17,6 @@ public class Config {
     public static final String PREF_KEY_LIST_ORDERS = "LIST_ORDERS";
     public static final String PREF_KEY_LIST_USERS = "LIST_USERS";
     public static final String PREF_KEY_LIST_SPINNER = "LIST_SPINNER";
+    public static final String PREF_KEY_LIST_USERS_SPINNER = "LIST_USERS_SPINNER";
 
 }
