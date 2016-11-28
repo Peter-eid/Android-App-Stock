@@ -13,7 +13,7 @@ public class addProduct {
     private String name;
     @SerializedName("stock")
     @Expose
-    private String stock;
+    private int stock;
     @SerializedName("barcode")
     @Expose
     private String barcode;
@@ -35,7 +35,7 @@ public class addProduct {
      * @param name
      * @param barcode
      */
-    public addProduct(String name, String stock, String barcode, String productimage) {
+    public addProduct(String name, int stock, String barcode, String productimage) {
         this.name = name;
         this.stock = stock;
         this.barcode = barcode;
@@ -70,7 +70,7 @@ public class addProduct {
      * @return
      *     The stock
      */
-    public String getStock() {
+    public int getStock() {
         return stock;
     }
 
@@ -79,11 +79,11 @@ public class addProduct {
      * @param stock
      *     The stock
      */
-    public void setStock(String stock) {
+    public void setStock(int stock) {
         this.stock = stock;
     }
 
-    public addProduct withStock(String stock) {
+    public addProduct withStock(int stock) {
         this.stock = stock;
         return this;
     }

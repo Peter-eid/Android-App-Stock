@@ -65,8 +65,8 @@ public class AddProductActivity extends AppCompatActivity {
     public void addProductRequest(final String name, String stock, final String barcode, final String productimage) {
 
         apiCall = Factory.create();
-
-        addProduct oneProduct = new addProduct(name, stock, barcode, productimage);
+        int intStock = Integer.parseInt(stock);
+        addProduct oneProduct = new addProduct(name, intStock, barcode, productimage);
        ProductRequest productRequest = new ProductRequest();
         final Gson gson1 = new Gson();
         String post = gson1.toJson(productRequest.withProduct(oneProduct));
