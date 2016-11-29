@@ -25,6 +25,7 @@ import com.grizly.newposapp.R;
 import com.grizly.newposapp.beans.Order;
 import com.grizly.newposapp.beans.Operation;
 import com.grizly.newposapp.beans.OperationRequest;
+import com.grizly.newposapp.beans.Product;
 import com.grizly.newposapp.beans.SpinnerItem;
 import com.grizly.newposapp.connectivity.Factory;
 import com.grizly.newposapp.connectivity.MyApiEndpointInterface;
@@ -185,7 +186,7 @@ public class OrderActivity extends AppCompatActivity {
         }
     }
 
-    public void createOrderRequest(String pid, final String pn, String uid, final String un, String tid, final String tn) {
+    public void createOrderRequest(final String pid, final String pn, String uid, final String un, String tid, final String tn) {
         apiCall = Factory.create();
 //        10/5/16, 9:22:22 PM
        final String date = DateFormat.getDateTimeInstance(DateFormat.SHORT,DateFormat.MEDIUM).format(new Date());
@@ -206,11 +207,21 @@ public class OrderActivity extends AppCompatActivity {
                             JSONObject json = new JSONObject(resp);
                             Boolean json_result = json.getBoolean("result");
                             if (json_result) {
+                                ArrayList<Product> productList = Product.getPrefArraylist(Config.PREF_KEY_LIST_PRODUCTS, OrderActivity.this);
+                                for (int x = 0; x < productList.size(); x++) {
+                                    if(productList.get(x).getPid().equals(pid)){
+                                        int stock = Integer.parseInt(productList.get(x).getInStock()) - 1;
+                                        Product oneProd = new Product(Integer.toString(stock),productList.get(x).getImageUrl(),productList.get(x).getBarcode(),productList.get(x).getProduct(),productList.get(x).getPid());
+                                        productList.set(x,oneProd);
+                                        break;
+                                    }
+                                }
+                                Methods.savePrefObject(productList, Config.PREF_KEY_LIST_PRODUCTS, OrderActivity.this);
                                 JSONObject json_data = json.getJSONObject("data");
                                 String json_oid = json_data.optString("_id");
                                 ArrayList<Order> orderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
                                 orderList.add(new Order(json_oid,un, pn, tn, date));
-                                Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
+
                                 finish();
                             } else {
                                 JSONObject json_error = json.getJSONObject("errors");
