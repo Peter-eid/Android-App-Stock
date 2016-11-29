@@ -49,7 +49,7 @@ public class Product {
     }
 
     static public ArrayList getPrefArraylist(String Key, Context context) {
-        ArrayList<Product> list = null;
+        ArrayList<Product> list = new ArrayList<>();
         try {
             SharedPreferences settings = context.getSharedPreferences(Config.PREFS_NAME, 0);
             Gson gson = new Gson();

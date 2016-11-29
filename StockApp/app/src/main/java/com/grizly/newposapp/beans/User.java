@@ -23,7 +23,7 @@ public class User {
     }
 
     static public ArrayList getPrefArraylist(String Key, Context context) {
-        ArrayList<User> list = null;
+        ArrayList<User> list = new ArrayList<>();
         try {
             SharedPreferences settings = context.getSharedPreferences(Config.PREFS_NAME, 0);
             Gson gson = new Gson();

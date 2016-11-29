@@ -48,7 +48,7 @@ public class Order {
     }
 
     static public ArrayList getPrefArraylist(String Key, Context context) {
-        ArrayList<Order> list = null;
+        ArrayList<Order> list = new ArrayList<>();
         try {
             SharedPreferences settings = context.getSharedPreferences(Config.PREFS_NAME, 0);
             Gson gson = new Gson();
