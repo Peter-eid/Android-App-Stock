@@ -221,7 +221,7 @@ public class OrderActivity extends AppCompatActivity {
                                 String json_oid = json_data.optString("_id");
                                 ArrayList<Order> orderList = Order.getPrefArraylist(Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
                                 orderList.add(new Order(json_oid,un, pn, tn, date));
-
+                                Methods.savePrefObject(orderList, Config.PREF_KEY_LIST_ORDERS, OrderActivity.this);
                                 finish();
                             } else {
                                 JSONObject json_error = json.getJSONObject("errors");
